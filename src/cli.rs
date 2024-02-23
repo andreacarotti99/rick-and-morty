@@ -1,42 +1,42 @@
-use clap::{Arg, Command};
+use clap::Parser;
+use clap::Subcommand;
 
+#[derive(Parser)]
+#[command(name = "Rick and Morty CLI", version = "1.0", author = "Andrea Carotti", about)]
+pub struct Cli {
+    #[command(subcommand)]
+    pub command: Commands,
+}
 
-pub fn build_cli() -> Command {
-    Command::new("Rick and Morty CLI")
-        .version("1.0")
-        .author("Andrea Carotti")
-        .about("Consume the Rick and Morty API")
+#[derive(Subcommand)]
+pub enum Commands {
+    
+    FetchAllCharacters,
 
-        .subcommand(Command::new("fetch_all_characters")
-            .about("Fetches all characters"))
+    FetchSingleCharacter {
+        #[arg(help = "The ID of the character")]
+        id: String,
+    },
+   
+    FetchFilteredCharacters {
+        #[arg(long, help = "Filter by character name")]
+        name: Option<String>,
         
-        .subcommand(Command::new("fetch_single_character")
-            .about("Fetches a single character by ID")
-            .arg(Arg::new("id")
-                .help("The ID of the character")
-                .required(true)
-                .index(1)))
+        #[arg(long, help = "Filter by character status")]
+        status: Option<String>,
         
-        .subcommand(Command::new("fetch_filtered_characters")
-            .about("Fetches characters based on filters")
-            .arg(Arg::new("name")
-                .help("Filter by character name")
-                .long("name"))
-            .arg(Arg::new("status")
-                .help("Filter by character status")
-                .long("status"))
-            .arg(Arg::new("species")
-                .help("Filter by species")
-                .long("species"))
-            .arg(Arg::new("character_type")
-                .help("Filter by type")
-                .long("character_type"))
-            .arg(Arg::new("gender")
-                .help("Filter by gender")
-                .long("gender")))
-        .subcommand(Command::new("fetch_characters_list")
-            .about("Fetches a list of characters by IDs")
-            .arg(Arg::new("ids")
-                .help("The IDs of the characters, separated by commas")
-                .required(true)))
+        #[arg(long, help = "Filter by species")]
+        species: Option<String>,
+        
+        #[arg(long, help = "Filter by type", name = "character_type")]
+        character_type: Option<String>,
+        
+        #[arg(long, help = "Filter by gender")]
+        gender: Option<String>,
+    },
+    
+    FetchCharactersList {
+        #[arg(help = "The IDs of the characters, separated by commas")]
+        ids: String,
+    },
 }

@@ -3,39 +3,35 @@ mod models;
 mod resources;
 mod cli;
 
-
 use tokio;
 use crate::api::*;
 use crate::resources::characters::Filter;
+use crate::cli::Commands;
+use clap::Parser;
 use tokio::main;
-
 
 
 #[main]
 async fn main() {
-    let matches = cli::build_cli().get_matches();
+    let cli = cli::Cli::parse();
 
-    //let rt = Runtime::new().unwrap(); // Create a new Tokio runtime
-
-    match matches.subcommand() {
-        Some(("fetch_all_characters", _)) => {
+    match cli.command {
+        Commands::FetchAllCharacters => {
             handle_fetch_all_characters().await;
         },
-        Some(("fetch_single_character", sub_matches)) => {
-            handle_fetch_single_character(sub_matches).await;
+        Commands::FetchSingleCharacter { id } => {
+            handle_fetch_single_character(id).await;
         },
-        Some(("fetch_filtered_characters", sub_matches)) => {
-            handle_fetch_filtered_characters(sub_matches).await;
-        },
-        Some(("fetch_characters_list", sub_matches)) => {
-            handle_fetch_characters_list(sub_matches).await;
-        },
+        Commands::FetchFilteredCharacters { name, status, species, character_type, gender } => {
+            handle_fetch_filtered_characters(name, status, species, character_type, gender).await;
 
-
-        // Other subcommands...
-        _ => {} // Handle the case where no subcommand was used or matches a defined command
+        },
+        Commands::FetchCharactersList { ids } => {
+            handle_fetch_characters_list(ids).await;
+        },
     }
 }
+
 
     
 async fn handle_fetch_all_characters() {
@@ -45,41 +41,43 @@ async fn handle_fetch_all_characters() {
     }
 }
 
-async fn handle_fetch_single_character(matches: &clap::ArgMatches) {
-    if let Some(id_str) = matches.get_one::<String>("id") {
-        if let Ok(id) = id_str.parse::<i32>() {
-            match fetch_single_character(id).await {
-                Ok(response) => println!("Single Character: {:#?}", response),
-                Err(e) => eprintln!("Error fetching character {}: {}", id, e),
-            }
-        } else {
-            eprintln!("Invalid character ID: {}", id_str);
+async fn handle_fetch_single_character(id_str: String) {
+    if let Ok(id) = id_str.parse::<i32>() {
+        match fetch_single_character(id).await {
+            Ok(response) => println!("Single Character: {:#?}", response),
+            Err(e) => eprintln!("Error fetching character {}: {}", id, e),
         }
+    } else {
+        eprintln!("Invalid character ID: {}", id_str);
     }
 }
 
-async fn handle_fetch_filtered_characters(matches: &clap::ArgMatches) {
+
+async fn handle_fetch_filtered_characters(
+    name: Option<String>,
+    status: Option<String>,
+    species: Option<String>,
+    character_type: Option<String>,
+    gender: Option<String>,
+    ) {
     let filter = Filter {
-        name: matches.get_one::<String>("name").cloned(),
-        status: matches.get_one::<String>("status").cloned(),
-        species: matches.get_one::<String>("species").cloned(),
-        character_type: matches.get_one::<String>("character_type").cloned(),
-        gender: matches.get_one::<String>("gender").cloned(),
-        ..Default::default()
+        name,
+        status,
+        species,
+        character_type,
+        gender,
+        ..Default::default() // Assuming Filter struct has other fields with default values
     };
-    
 
     match fetch_filtered_characters(&filter).await {
         Ok(response) => println!("Filtered Characters: {:#?}", response),
-        // still need to handle the case when the response is empty: "error" : "There is nothing here", now returns an error
         Err(e) => eprintln!("Error fetching filtered characters: {}", e),
-        }
     }
+}
 
-async fn handle_fetch_characters_list(matches: &clap::ArgMatches) {
-    let id_list: Vec<i32> = matches.get_many::<String>("ids")
-        .unwrap_or_default()
-        .filter_map(|id| id.parse().ok())
+async fn handle_fetch_characters_list(ids: String) {
+    let id_list: Vec<i32> = ids.split(',')
+        .filter_map(|id| id.trim().parse::<i32>().ok())
         .collect();
 
     match fetch_characters_list(&id_list).await {
