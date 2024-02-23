@@ -43,8 +43,20 @@ async fn main() {
         Commands::FetchMultipleLocations {ids} => {
             handle_calls::handle_fetch_multiple_locations(ids).await;
         },
-        
 
+        //episodes
+        Commands::FetchAllEpisodes => {
+            handle_calls::handle_fetch_all_episodes().await;
+        },
+        Commands::FetchSingleEpisode {id} => {
+            handle_calls::handle_fetch_single_episode(id).await;
+        },
+        Commands::FetchFilteredEpisodes {name, episode} => {
+            handle_calls::handle_fetch_filtered_episodes(name, episode).await;
+        },
+        Commands::FetchMultipleEpisodes {ids} => {
+            handle_calls::handle_fetch_multiple_episodes(ids).await;
+        },
     }
 }
 

@@ -1,6 +1,8 @@
 use crate::api;
 use crate::resources::characters::FilterCharacter;
 use crate::resources::locations::FilterLocation;
+use crate::resources::episodes::FilterEpisode;
+
 
 // characters
 pub async fn handle_fetch_all_characters() {
@@ -104,3 +106,50 @@ pub async fn handle_fetch_multiple_locations(ids: String) {
 }
 
 
+
+//episodes
+
+pub async fn handle_fetch_all_episodes() {
+    match api::fetch_all_episodes().await {
+        Ok(response) => println!("All episodes: {:#?}", response),
+        Err(e) => eprintln!("Error fetching all episodes: {}", e),
+    }
+}
+
+pub async fn handle_fetch_single_episode(id_str: String) {
+    if let Ok(id) = id_str.parse::<i32>() {
+        match api::fetch_single_episode(id).await {
+            Ok(response) => println!("Single Episode: {:#?}", response),
+            Err(e) => eprintln!("Error fetching episode {}: {}", id, e),
+        }
+    } else {
+        eprintln!("Invalid episode ID: {}", id_str);
+    }
+}
+
+pub async fn handle_fetch_filtered_episodes(
+    name: Option<String>,
+    episode: Option<String>,
+    ) {
+    let filter_episode = FilterEpisode {
+        name,
+        episode,
+        ..Default::default() // if we want to extend filter with other filters
+    };
+
+    match api::fetch_filtered_episode(&filter_episode).await {
+        Ok(response) => println!("Filtered Locations: {:#?}", response),
+        Err(e) => eprintln!("Error fetching filtered locations: {}", e),
+    }
+}
+
+pub async fn handle_fetch_multiple_episodes(ids: String) {
+    let id_list: Vec<i32> = ids.split(',')
+        .filter_map(|id| id.trim().parse::<i32>().ok())
+        .collect();
+
+    match api::fetch_episode_list(&id_list).await {
+        Ok(response) => println!("Episode List: {:#?}", response),
+        Err(e) => eprintln!("Error fetching episode list: {}", e),
+    }
+}

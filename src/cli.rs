@@ -57,5 +57,24 @@ pub enum Commands {
     FetchMultipleLocations {
         #[arg(help = "The IDs of the locations, separated by commas")]
         ids: String,
+    },
+
+    //episodes
+    FetchAllEpisodes,
+    FetchSingleEpisode {
+        #[arg(help = "The ID of the episode")]
+        id: String,
+    },
+    FetchFilteredEpisodes {
+        #[arg(long, help = "Filter by episode name")]
+        name: Option<String>,
+        
+        #[arg(long, help = "Filter by episode code")]
+        episode: Option<String>,
+       
+    },
+    FetchMultipleEpisodes {
+        #[arg(help = "The IDs of the episodes, separated by commas")]
+        ids: String,
     }
 }

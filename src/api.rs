@@ -2,6 +2,7 @@
 use reqwest::Error;
 use serde::de::DeserializeOwned;
 use crate::resources::characters::{Character, CharactersResponse, FilterCharacter, CharactersListResponse};
+use crate::resources::episodes::{Episode, EpisodeListResponse,FilterEpisode,  EpisodeResponse};
 use crate::resources::locations::{Location, LocationResponse, FilterLocation, LocationListResponse};
 
 const BASE_URL: &str = "https://rickandmortyapi.com/api/";
@@ -67,4 +68,33 @@ pub async fn fetch_location_list(location_ids: &[i32]) -> Result<LocationListRes
         .join(",");
     let list_location_url = format!("{}location/{}", BASE_URL, ids_string);
     fetch_and_deserialize::<LocationListResponse>(&list_location_url).await
+}
+
+// episodes
+
+pub async fn fetch_single_episode(episode_id: i32) -> Result<Episode, Error> {
+    let single_episde_url = format!("{}episode/{}", BASE_URL, episode_id);
+    fetch_and_deserialize::<Episode>(&single_episde_url).await
+}
+
+pub async fn fetch_all_episodes() -> Result<EpisodeResponse, Error> {
+    let all_episode_url = format!("{}episode/", BASE_URL);
+    print!("{}\n", all_episode_url);
+    fetch_and_deserialize::<EpisodeResponse>(&all_episode_url).await
+}
+
+pub async fn fetch_filtered_episode(filter: &FilterEpisode) -> Result<EpisodeResponse, Error> {
+    let query_string = filter.to_query_string();
+    let filtered_episode_url = format!("{}episode/?{}", BASE_URL, query_string);
+    println!("{}", filtered_episode_url);
+    fetch_and_deserialize::<EpisodeResponse>(&filtered_episode_url).await
+}
+
+pub async fn fetch_episode_list(episode_ids: &[i32]) -> Result<EpisodeListResponse, Error> {
+    let ids_string = episode_ids.iter()
+        .map(|id| id.to_string())
+        .collect::<Vec<String>>()
+        .join(",");
+    let list_episode_url = format!("{}episode/{}", BASE_URL, ids_string);
+    fetch_and_deserialize::<EpisodeListResponse>(&list_episode_url).await
 }
