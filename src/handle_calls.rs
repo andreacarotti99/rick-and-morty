@@ -1,8 +1,8 @@
-use crate::api::*;
+use crate::api;
 use crate::resources::characters::Filter;
 
 pub async fn handle_fetch_all_characters() {
-    match fetch_all_characters().await {
+    match api::fetch_all_characters().await {
         Ok(response) => println!("All Characters: {:#?}", response),
         Err(e) => eprintln!("Error fetching all characters: {}", e),
     }
@@ -10,7 +10,7 @@ pub async fn handle_fetch_all_characters() {
 
 pub async fn handle_fetch_single_character(id_str: String) {
     if let Ok(id) = id_str.parse::<i32>() {
-        match fetch_single_character(id).await {
+        match api::fetch_single_character(id).await {
             Ok(response) => println!("Single Character: {:#?}", response),
             Err(e) => eprintln!("Error fetching character {}: {}", id, e),
         }
@@ -35,7 +35,7 @@ pub async fn handle_fetch_filtered_characters(
         ..Default::default() // if we want to extend filter with other filters
     };
 
-    match fetch_filtered_characters(&filter).await {
+    match api::fetch_filtered_characters(&filter).await {
         Ok(response) => println!("Filtered Characters: {:#?}", response),
         Err(e) => eprintln!("Error fetching filtered characters: {}", e),
     }
@@ -46,7 +46,7 @@ pub async fn handle_fetch_characters_list(ids: String) {
         .filter_map(|id| id.trim().parse::<i32>().ok())
         .collect();
 
-    match fetch_characters_list(&id_list).await {
+    match api::fetch_characters_list(&id_list).await {
         Ok(response) => println!("Characters List: {:#?}", response),
         Err(e) => eprintln!("Error fetching characters list: {}", e),
     }
