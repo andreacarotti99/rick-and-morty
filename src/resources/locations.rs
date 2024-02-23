@@ -3,6 +3,7 @@ use crate::models::Info;
 use chrono::{DateTime, Utc};
 
 
+
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Location {
     pub id: i32,
@@ -34,6 +35,7 @@ pub struct FilterLocation {
 }
 
 
+/* 
 impl FilterLocation {
     pub fn to_query_string(&self) -> String {
         // Use serde_qs to serialize the Filter struct into a query string
@@ -42,3 +44,4 @@ impl FilterLocation {
         query
     }
 }
+*/

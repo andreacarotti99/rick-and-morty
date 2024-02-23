@@ -30,7 +30,7 @@ pub struct FilterEpisode {
     pub episode: Option<String>
 }
 
-
+/*
 impl FilterEpisode {
     pub fn to_query_string(&self) -> String {
         // Use serde_qs to serialize the Filter struct into a query string
@@ -39,3 +39,4 @@ impl FilterEpisode {
         query
     }
 }
+*/

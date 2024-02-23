@@ -4,6 +4,7 @@ use serde::de::DeserializeOwned;
 use crate::resources::characters::{Character, CharactersResponse, FilterCharacter, CharactersListResponse};
 use crate::resources::episodes::{Episode, EpisodeListResponse,FilterEpisode,  EpisodeResponse};
 use crate::resources::locations::{Location, LocationResponse, FilterLocation, LocationListResponse};
+use crate::models::Filter;
 
 const BASE_URL: &str = "https://rickandmortyapi.com/api/";
 

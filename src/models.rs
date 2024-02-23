@@ -15,3 +15,13 @@ pub struct Error {
     error: String
 }
 
+pub trait Filter {
+    fn to_query_string(&self) -> String;
+}
+
+//to avoid rewriting the same function for every filter
+impl<T: Serialize> Filter for T {
+    fn to_query_string(&self) -> String {
+        serde_qs::to_string(self).unwrap_or_default()
+    }
+}
