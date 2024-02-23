@@ -10,3 +10,8 @@ pub struct Info {
     prev: Option<String>,
 }
 
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Error {
+    error: String
+}
+

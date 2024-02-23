@@ -10,14 +10,13 @@ pub struct Cli {
 
 #[derive(Subcommand)]
 pub enum Commands {
-    
-    FetchAllCharacters,
 
+    //characters
+    FetchAllCharacters,
     FetchSingleCharacter {
         #[arg(help = "The ID of the character")]
         id: String,
     },
-   
     FetchFilteredCharacters {
         #[arg(long, help = "Filter by character name")]
         name: Option<String>,
@@ -34,9 +33,29 @@ pub enum Commands {
         #[arg(long, help = "Filter by gender")]
         gender: Option<String>,
     },
-    
-    FetchCharactersList {
+    FetchMultipleCharacters {
         #[arg(help = "The IDs of the characters, separated by commas")]
         ids: String,
     },
+
+    //locatons
+    FetchAllLocations,
+    FetchSingleLocation {
+        #[arg(help = "The ID of the location")]
+        id: String,
+    },
+    FetchFilteredLocations {
+        #[arg(long, help = "Filter by location name")]
+        name: Option<String>,
+        
+        #[arg(long, help = "Filter by location type")]
+        location_type: Option<String>,
+        
+        #[arg(long, help = "Filter by location dimension")]
+        dimension: Option<String>,
+    },
+    FetchMultipleLocations {
+        #[arg(help = "The IDs of the locations, separated by commas")]
+        ids: String,
+    }
 }

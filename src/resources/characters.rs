@@ -11,8 +11,8 @@ pub struct Character {
     #[serde(rename = "type")]
     character_type: String,
     gender: String,
-    origin: Location,
-    location: Location,
+    origin: LocationCharacter,
+    location: LocationCharacter,
     image: String,
     episode: Vec<String>,
     url: String,
@@ -20,7 +20,7 @@ pub struct Character {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-pub struct Location {
+pub struct LocationCharacter {
     name: String,
     url: String,
 }
@@ -35,7 +35,7 @@ pub struct CharactersResponse {
 pub type CharactersListResponse = Vec<Character>;
 
 #[derive(Default, Serialize)]
-pub struct Filter {
+pub struct FilterCharacter {
     pub name: Option<String>,
     pub status: Option<String>,
     pub species: Option<String>,
@@ -46,7 +46,7 @@ pub struct Filter {
 
 
 
-impl Filter {
+impl FilterCharacter {
     pub fn to_query_string(&self) -> String {
         // Use serde_qs to serialize the Filter struct into a query string
         let query = serde_qs::to_string(self).unwrap_or_default();

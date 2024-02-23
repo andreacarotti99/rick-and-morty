@@ -16,6 +16,7 @@ async fn main() {
     let cli = cli::Cli::parse();
 
     match cli.command {
+        // characters
         Commands::FetchAllCharacters => {
             handle_calls::handle_fetch_all_characters().await;
         },
@@ -25,9 +26,25 @@ async fn main() {
         Commands::FetchFilteredCharacters {name, status, species, character_type, gender } => {
             handle_calls::handle_fetch_filtered_characters(name, status, species, character_type, gender).await;
         },
-        Commands::FetchCharactersList {ids } => {
+        Commands::FetchMultipleCharacters {ids } => {
             handle_calls::handle_fetch_characters_list(ids).await;
         },
+
+        // locations
+        Commands::FetchAllLocations => {
+            handle_calls::handle_fetch_all_locations().await;
+        },
+        Commands::FetchSingleLocation {id } => {
+            handle_calls::handle_fetch_single_location(id).await;
+        },
+        Commands::FetchFilteredLocations {name, location_type, dimension }=> {
+            handle_calls::handle_fetch_filtered_locations(name, location_type, dimension).await;
+        },
+        Commands::FetchMultipleLocations {ids} => {
+            handle_calls::handle_fetch_multiple_locations(ids).await;
+        },
+        
+
     }
 }
 
