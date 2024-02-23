@@ -1,11 +1,11 @@
 mod api;
 mod models;
+mod resources;
 
 use tokio;
 use clap::{Arg, Command};
-// use tokio::runtime::Runtime; // Import Runtime for blocking on async code
 use crate::api::*;
-use crate::models::Filter;
+use crate::resources::characters::Filter;
 use tokio::main;
 
 
@@ -70,6 +70,7 @@ async fn handle_fetch_filtered_characters(matches: &clap::ArgMatches) {
 
     match fetch_filtered_characters(&filter).await {
         Ok(response) => println!("Filtered Characters: {:#?}", response),
+        // still need to handle the case when the response is empty: "error" : "There is nothing here", now returns an error
         Err(e) => eprintln!("Error fetching filtered characters: {}", e),
         }
     }

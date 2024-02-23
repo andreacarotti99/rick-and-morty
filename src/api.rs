@@ -1,7 +1,7 @@
 
 use reqwest::Error;
 use serde::de::DeserializeOwned;
-use crate::models::{Character, CharactersResponse, Filter, CharactersListResponse};
+use crate::resources::characters::{Character, CharactersResponse, Filter, CharactersListResponse};
 
 
 const BASE_URL: &str = "https://rickandmortyapi.com/api/";
