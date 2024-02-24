@@ -3,6 +3,7 @@ mod models;
 mod resources;
 mod cli;
 mod handle_calls;
+mod proxy;
 
 use crate::cli::{Cli, Commands};
 use clap::Parser;
@@ -45,5 +46,8 @@ async fn dispatch_command(command: Commands) {
         FetchSingleEpisode { id } => handle_calls::handle_fetch_single_episode(id).await,
         FetchFilteredEpisodes { name, episode } => handle_calls::handle_fetch_filtered_episodes(name, episode).await,
         FetchMultipleEpisodes { ids } => handle_calls::handle_fetch_multiple_episodes(ids).await,
+    
+        // spin-up Proxy
+        StartProxy => proxy::start_proxy().await
     }
 }

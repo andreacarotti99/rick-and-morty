@@ -76,5 +76,8 @@ pub enum Commands {
     FetchMultipleEpisodes {
         #[arg(help = "The IDs of the episodes, separated by commas")]
         ids: String,
-    }
+    },
+
+    // proxy
+    StartProxy 
 }

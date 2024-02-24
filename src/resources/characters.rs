@@ -1,7 +1,6 @@
 use serde::{Deserialize, Serialize};
 use crate::models::Info;
 
-
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Character {
     id: i32,
