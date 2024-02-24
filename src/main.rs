@@ -4,6 +4,8 @@ mod resources;
 mod cli;
 mod handle_calls;
 mod proxy;
+mod proxy_signup;
+mod proxy_requests;
 
 use crate::cli::{Cli, Commands};
 use clap::Parser;
