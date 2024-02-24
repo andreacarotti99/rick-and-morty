@@ -34,14 +34,3 @@ pub struct FilterLocation {
     pub dimension: Option<String>,
 }
 
-
-/* 
-impl FilterLocation {
-    pub fn to_query_string(&self) -> String {
-        // Use serde_qs to serialize the Filter struct into a query string
-        let query = serde_qs::to_string(self).unwrap_or_default();
-        println!("{}", query);
-        query
-    }
-}
-*/
