@@ -12,13 +12,13 @@ where arguments is substituted by the commands below.
 - **Characters:**
   - `fetch-all-characters`: Fetch all characters.
   - `fetch-single-character <id>`: Fetch a single character by ID.
-  - `fetch-filtered-characters [--name <name>] [--status <status>] [--species <species>] [--type <type>] [--gender <gender>]`: Fetch characters with optional filters.
+  - `fetch-filtered-characters [--name <name>] [--status <status>] [--species <species>] [--character-type <type>] [--gender <gender>]`: Fetch characters with optional filters.
   - `fetch-multiple-characters <id1,id2,...>`: Fetch multiple characters by their IDs.
 
 - **Locations:**
   - `fetch-all-locations`: Fetch all locations.
   - `fetch-single-location <id>`: Fetch a single location by ID.
-  - `fetch-filtered-locations [--name <name>] [--type <type>] [--dimension <dimension>]`: Fetch locations with optional filters.
+  - `fetch-filtered-locations [--name <name>] [--location-type <type>] [--dimension <dimension>]`: Fetch locations with optional filters.
    - `fetch-multiple-locations <id1,id2,...>`: Fetch multiple locations by their IDs.
 
 - **Episodes:**
