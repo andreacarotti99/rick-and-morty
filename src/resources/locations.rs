@@ -2,8 +2,6 @@ use serde::{Deserialize, Serialize};
 use crate::models::Info;
 use chrono::{DateTime, Utc};
 
-
-
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Location {
     pub id: i32,
@@ -16,13 +14,11 @@ pub struct Location {
     pub created: DateTime<Utc>, 
 }
 
-
 #[derive(Serialize, Deserialize, Debug)]
 pub struct LocationResponse {
     info: Info,
     results: Vec<Location>,
 }
-
 
 pub type LocationListResponse = Vec<Location>;
 

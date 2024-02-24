@@ -14,7 +14,6 @@ pub struct Episode {
     pub created: DateTime<Utc>, 
 }
 
-
 #[derive(Serialize, Deserialize, Debug)]
 pub struct EpisodeResponse {
     info: Info,
