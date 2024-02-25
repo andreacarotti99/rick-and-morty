@@ -5,7 +5,7 @@ mod cli;
 mod handle_calls;
 mod proxy;
 mod proxy_signup;
-mod proxy_requests;
+mod proxy_request_handler;
 
 use crate::cli::{Cli, Commands};
 use clap::Parser;
@@ -22,7 +22,7 @@ async fn main() {
 async fn dispatch_command(cli: Cli) {
     use Commands::*;
     
-    //let command = cli.command;
+    
     let handler = Handler::new(&cli);
     
     match cli.command {

@@ -3,7 +3,7 @@ use std::sync::Arc;
 use tokio::sync::Mutex;
 use warp::{Filter, body};
 use serde::Deserialize;
-use crate::{proxy_signup, proxy_requests};
+use crate::{proxy_signup, proxy_request_handler};
 use serde_json::Value;
 
 
@@ -40,7 +40,7 @@ pub async fn start_proxy() {
             let cache_clone = cache.clone(); 
             let users_clone = users.clone(); 
             move |endpoint: String, api_key: String| {
-                proxy_requests::proxy_handler(endpoint, api_key, cache_clone.clone(), users_clone.clone()) // Clone for handler
+                proxy_request_handler::request_handler(endpoint, api_key, cache_clone.clone(), users_clone.clone()) // Clone for handler
             }
         });
 
