@@ -8,8 +8,7 @@ pub async fn request_handler(endpoint: String, api_key: String, cache: Cache, us
     // Check API key validity
     let users = users.lock().await;
     
-    // Check if the API key exists in the users HashMap
-    let api_key_exists = users.contains_key(&api_key);
+    let api_key_exists = users.values().any(|key| key == &api_key);
 
     if !api_key_exists {
         println!("API key is either wrong or not provided");

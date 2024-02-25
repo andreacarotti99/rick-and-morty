@@ -32,9 +32,3 @@ impl<T: Serialize> Filter for T {
 pub struct ApiKey {
     pub api_key: String,
 }
-
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct User {
-    pub user_name: String
-}
