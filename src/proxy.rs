@@ -4,9 +4,11 @@ use tokio::sync::Mutex;
 use warp::{Filter, body};
 use serde::Deserialize;
 use crate::{proxy_signup, proxy_requests};
+use serde_json::Value;
+
 
 pub type Users = Arc<Mutex<HashMap<String, String>>>;
-pub type Cache = Arc<Mutex<HashMap<String, String>>>;
+pub type Cache = Arc<Mutex<HashMap<String, Value>>>;
 
 #[derive(Deserialize)]
 struct SignupInfo {
@@ -43,7 +45,8 @@ pub async fn start_proxy() {
         });
 
     let routes = signup.or(proxy);
-
+    
+    println!("Proxy listening on port 3030");
     warp::serve(routes).run(([127, 0, 0, 1], 3030)).await;
 }
 

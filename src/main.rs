@@ -10,44 +10,49 @@ mod proxy_requests;
 use crate::cli::{Cli, Commands};
 use clap::Parser;
 use tokio;
+use handle_calls::Handler;
 
 #[tokio::main]
 async fn main() {
     let cli = Cli::parse();
-    dispatch_command(cli.command).await;
+    
+    dispatch_command(cli).await;
 }
 
-async fn dispatch_command(command: Commands) {
+async fn dispatch_command(cli: Cli) {
     use Commands::*;
     
-    match command {
+    //let command = cli.command;
+    let handler = Handler::new(&cli);
+    
+    match cli.command {
         // Characters
-        FetchAllCharacters => handle_calls::handle_fetch_all_characters().await,
-        FetchSingleCharacter { id } => handle_calls::handle_fetch_single_character(id).await,
+        FetchAllCharacters => handler.handle_fetch_all_characters().await,
+        FetchSingleCharacter { id } => handler.handle_fetch_single_character(id).await,
         FetchFilteredCharacters {
             name,
             status,
             species,
             character_type,
             gender,
-        } => handle_calls::handle_fetch_filtered_characters(name, status, species, character_type, gender).await,
-        FetchMultipleCharacters { ids } => handle_calls::handle_fetch_characters_list(ids).await,
+        } => handler.handle_fetch_filtered_characters(name, status, species, character_type, gender).await,
+        FetchMultipleCharacters { ids } => handler.handle_fetch_characters_list(ids).await,
 
         // Locations
-        FetchAllLocations => handle_calls::handle_fetch_all_locations().await,
-        FetchSingleLocation { id } => handle_calls::handle_fetch_single_location(id).await,
+        FetchAllLocations => handler.handle_fetch_all_locations().await,
+        FetchSingleLocation { id } => handler.handle_fetch_single_location(id).await,
         FetchFilteredLocations {
             name,
             location_type,
             dimension,
-        } => handle_calls::handle_fetch_filtered_locations(name, location_type, dimension).await,
-        FetchMultipleLocations { ids } => handle_calls::handle_fetch_multiple_locations(ids).await,
+        } => handler.handle_fetch_filtered_locations(name, location_type, dimension).await,
+        FetchMultipleLocations { ids } => handler.handle_fetch_multiple_locations(ids).await,
 
         // Episodes
-        FetchAllEpisodes => handle_calls::handle_fetch_all_episodes().await,
-        FetchSingleEpisode { id } => handle_calls::handle_fetch_single_episode(id).await,
-        FetchFilteredEpisodes { name, episode } => handle_calls::handle_fetch_filtered_episodes(name, episode).await,
-        FetchMultipleEpisodes { ids } => handle_calls::handle_fetch_multiple_episodes(ids).await,
+        FetchAllEpisodes => handler.handle_fetch_all_episodes().await,
+        FetchSingleEpisode { id } => handler.handle_fetch_single_episode(id).await,
+        FetchFilteredEpisodes { name, episode } => handler.handle_fetch_filtered_episodes(name, episode).await,
+        FetchMultipleEpisodes { ids } => handler.handle_fetch_multiple_episodes(ids).await,
     
         // spin-up Proxy
         StartProxy => proxy::start_proxy().await

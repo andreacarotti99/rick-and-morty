@@ -6,6 +6,14 @@ use clap::Subcommand;
 pub struct Cli {
     #[command(subcommand)]
     pub command: Commands,
+
+    #[arg(long, help = "Specify a proxy URL")]
+    //default_value = http://localhost:3030/
+    pub proxy: Option<String>,
+
+    
+    #[arg(long, help = "Specify an API key")]
+    pub key: Option<String>,
 }
 
 #[derive(Subcommand)]
