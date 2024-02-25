@@ -32,8 +32,8 @@ where arguments is substituted by the commands below.
 It is possible to set up a proxy running the command `cargo run -- start-proxy`.
 Users can sign-up to the proxy using the command `cargo run -- sign-up <username>`. If no user with that username is already present in the temporary hashmap of the proxy, the user is provided with an api-key.
 
-The user can retrieve cached data from the proxy using the command:
-`cargo run -- --proxy <proxy-address> --key <api-key> <arguments>`
+The user can retrieve cached data from the proxy using the command:··
+`cargo run -- --proxy <proxy-address> --key <api-key> <arguments>`··
 where `<arguments>` is one of the above commands to fetch data from the api.
 If the proxy have not yet cached any data, the request will be forwarded to the server, otherwise will be served to the user. 
 
