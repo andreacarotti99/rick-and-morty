@@ -55,6 +55,7 @@ async fn dispatch_command(cli: Cli) {
         FetchMultipleEpisodes { ids } => handler.handle_fetch_multiple_episodes(ids).await,
     
         // spin-up Proxy
-        StartProxy => proxy::start_proxy().await
+        StartProxy => proxy::start_proxy().await,
+        SignUp {username} => handler.handle_send_signup(username).await
     }
 }

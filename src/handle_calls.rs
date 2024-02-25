@@ -23,6 +23,13 @@ impl Handler {
 
         Handler {base_url, api_key}
     }
+    pub async fn handle_send_signup(&self, username: String) {
+        match api::send_signup( &username).await {
+            Ok(response) => println!("{}", response),
+            Err(e) => eprintln!("Error signing up: {}", e),
+        }
+
+    }
 
     // characters
     pub async fn handle_fetch_all_characters(&self) {

@@ -6,6 +6,9 @@ use crate::resources::episodes::{Episode, EpisodeListResponse,FilterEpisode,  Ep
 use crate::resources::locations::{Location, LocationResponse, FilterLocation, LocationListResponse};
 use crate::models::Filter;
 use crate::handle_calls::Handler;
+use crate::proxy::SignupInfo;
+
+
 
 
 pub async fn fetch_and_deserialize<T: DeserializeOwned>(url: &str, api_key: &str) -> Result<T, Error> {
@@ -103,4 +106,27 @@ pub async fn fetch_episode_list(handler: &Handler, episode_ids: &[i32]) -> Resul
         .join(",");
     let list_episode_url = format!("{}episode/{}", handler.base_url, ids_string);
     fetch_and_deserialize::<EpisodeListResponse>(&list_episode_url, &handler.api_key).await
+}
+
+
+
+
+
+
+
+// Assuming Handler has a field base_url of type String.
+pub async fn send_signup(requested_username: &str) -> Result<String, Error> {
+    
+    let signup_info = SignupInfo {
+        username: requested_username.to_string()
+    };
+    let client = reqwest::Client::new();
+    let res = client.post("http://localhost:3030/signup")
+        .json(&signup_info) // Serialize `user` as JSON and use as the request body
+        .send()
+        .await?;
+
+    let body = res.text().await?;
+    
+    Ok(body)
 }

@@ -25,3 +25,16 @@ impl<T: Serialize> Filter for T {
         serde_qs::to_string(self).unwrap_or_default()
     }
 }
+
+
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct ApiKey {
+    pub api_key: String,
+}
+
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct User {
+    pub user_name: String
+}

@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::sync::Arc;
 use tokio::sync::Mutex;
 use warp::{Filter, body};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use crate::{proxy_signup, proxy_request_handler};
 use serde_json::Value;
 
@@ -10,9 +10,9 @@ use serde_json::Value;
 pub type Users = Arc<Mutex<HashMap<String, String>>>;
 pub type Cache = Arc<Mutex<HashMap<String, Value>>>;
 
-#[derive(Deserialize)]
-struct SignupInfo {
-    username: String,
+#[derive(Serialize, Deserialize)]
+pub struct SignupInfo {
+    pub username: String,
 }
 
 pub async fn start_proxy() {

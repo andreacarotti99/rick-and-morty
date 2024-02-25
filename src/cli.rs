@@ -87,5 +87,9 @@ pub enum Commands {
     },
 
     // proxy
-    StartProxy 
+    StartProxy,
+    SignUp {
+        #[arg(help = "The username to request the API key")]
+        username: String,
+    }
 }
