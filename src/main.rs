@@ -15,13 +15,11 @@ use handle_calls::Handler;
 #[tokio::main]
 async fn main() {
     let cli = Cli::parse();
-    
     dispatch_command(cli).await;
 }
 
 async fn dispatch_command(cli: Cli) {
     use Commands::*;
-    
     
     let handler = Handler::new(&cli);
     

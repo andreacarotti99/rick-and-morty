@@ -108,13 +108,7 @@ pub async fn fetch_episode_list(handler: &Handler, episode_ids: &[i32]) -> Resul
     fetch_and_deserialize::<EpisodeListResponse>(&list_episode_url, &handler.api_key).await
 }
 
-
-
-
-
-
-
-// Assuming Handler has a field base_url of type String.
+// signup
 pub async fn send_signup(requested_username: &str) -> Result<String, Error> {
     
     let signup_info = SignupInfo {
@@ -122,7 +116,7 @@ pub async fn send_signup(requested_username: &str) -> Result<String, Error> {
     };
     let client = reqwest::Client::new();
     let res = client.post("http://localhost:3030/signup")
-        .json(&signup_info) // Serialize `user` as JSON and use as the request body
+        .json(&signup_info) 
         .send()
         .await?;
 
