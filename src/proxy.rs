@@ -22,6 +22,13 @@ pub async fn start_proxy() {
     // the user storage contains the user with its api key
     let users = Arc::new(Mutex::new(HashMap::new())); // Simulated user storage
 
+    //inserting an api backdoor for testing
+    {
+        let mut users_lock = users.lock().await;
+        users_lock.insert("secret_key".to_string(), "secret_username".to_string());
+    }
+
+
     let signup = warp::path("signup")
         .and(warp::post())
         .and(body::json::<SignupInfo>())  // Extract the username from the request body
@@ -34,13 +41,21 @@ pub async fn start_proxy() {
 
     let proxy = warp::path("proxy")
         .and(warp::get())
-        .and(warp::path::param())
+        .and(warp::path::tail())
+        .and(warp::query::raw())
         .and(warp::header::<String>("x-api-key"))
         .and_then({
             let cache_clone = cache.clone(); 
             let users_clone = users.clone(); 
-            move |endpoint: String, api_key: String| {
-                proxy_request_handler::request_handler(endpoint, api_key, cache_clone.clone(), users_clone.clone()) // Clone for handler
+            move |tail: warp::filters::path::Tail, query: String, api_key: String| {
+                let full_path = if query.is_empty() {
+                    tail.as_str().to_string()
+                } else {
+                    format!("{}?{}", tail.as_str(), query)
+                };
+                // println!("Forwarding to: {}", full_path);
+                // Forward the request including the path and query string
+                proxy_request_handler::request_handler(full_path, api_key, cache_clone.clone(), users_clone.clone())
             }
         });
 

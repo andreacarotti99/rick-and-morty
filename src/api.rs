@@ -7,6 +7,7 @@ use crate::resources::locations::{Location, LocationResponse, FilterLocation, Lo
 use crate::models::Filter;
 use crate::handle_calls::Handler;
 use crate::proxy::SignupInfo;
+//use crate::proxy::start_proxy;
 
 
 
@@ -26,6 +27,7 @@ pub async fn fetch_and_deserialize<T: DeserializeOwned>(url: &str, api_key: &str
 
 pub async fn fetch_filtered_characters(handler: &Handler, filter: &FilterCharacter) -> Result<CharactersResponse, Error> {
     let query_string = filter.to_query_string();
+    println!("{}", query_string);
     let filtered_characters_url = format!("{}character/?{}", handler.base_url, query_string);
     println!("{}", filtered_characters_url);
     fetch_and_deserialize::<CharactersResponse>(&filtered_characters_url, &handler.api_key).await
@@ -39,6 +41,7 @@ pub async fn fetch_all_characters(handler: &Handler,) -> Result<CharactersRespon
 
 pub async fn fetch_single_character(handler: &Handler, character_id: i32) -> Result<Character, Error> {
     let single_character_url = format!("{}character/{}", handler.base_url, character_id);
+    println!("{}",single_character_url);
     fetch_and_deserialize::<Character>(&single_character_url, &handler.api_key).await
 }
 
@@ -124,3 +127,87 @@ pub async fn send_signup(requested_username: &str) -> Result<String, Error> {
     
     Ok(body)
 }
+
+
+#[tokio::test]
+async fn test_proxy_server_concurrency_signup() {
+    // testing 1000 different clients (username) requesting 1000 different API keys
+
+    tokio::spawn(async {
+        crate::proxy::start_proxy().await;
+    });
+    tokio::time::sleep(tokio::time::Duration::from_millis(100)).await;
+
+    let client_count = 1000; 
+    let mut tasks = Vec::new();
+    let start = tokio::time::Instant::now();
+    
+    for i in 0..client_count {
+        let username = format!("andrea{}", i); 
+        tasks.push(tokio::spawn(async move { 
+            match send_signup(&username).await {
+                Ok(response) => println!("{}", response),
+                Err(e) => eprintln!("Error signing up: {}", e),
+            }
+        }));
+    }
+
+    let _results: Vec<_> = futures::future::join_all(tasks).await;
+    let duration = start.elapsed();
+    println!("Total execution time: {:?}", duration);
+}
+
+// testing 100 requests to the server 
+/* 
+#[tokio::test]
+async fn test_proxy_server_concurrency_requests() {
+    tokio::spawn(async {
+        crate::proxy::start_proxy().await;
+    });
+    tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
+    
+    // speed test for the server results
+    
+    let client_count = 100;
+    let mut tasks = Vec::new();
+    let start = tokio::time::Instant::now();
+
+    for i in 0..client_count {
+        let handler = Handler {
+            base_url: "http://rickandmortyapi.com/api/".to_string(),
+            api_key: "".to_string()
+        };
+        
+        tasks.push(tokio::spawn(async move { 
+            handler.handle_fetch_single_character((i + 1).to_string()).await;
+        }));
+    }
+
+    let _results: Vec<_> = futures::future::join_all(tasks).await;
+    let duration_server_requests = start.elapsed();
+    println!("Total execution time: {:?}", duration_server_requests);
+
+    // now test the cached results
+    
+    let client_count = 100;
+    let mut tasks = Vec::new();
+    let start = tokio::time::Instant::now();
+
+    for i in 0..client_count {
+        let handler = Handler {
+            base_url: "http://127.0.0.1:3030/".to_string(),
+            api_key: "secret_key".to_string()
+        };
+        
+        tasks.push(tokio::spawn(async move { 
+            handler.handle_fetch_single_character((i + 1).to_string()).await;
+        }));
+    }
+
+    let _results: Vec<_> = futures::future::join_all(tasks).await;
+    let duration_cache_requests = start.elapsed();
+    println!("Total execution time: {:?}", duration_cache_requests);
+
+}
+
+*/
