@@ -1,6 +1,6 @@
 # RickAndMortyCLI
 
-RickAndMortyCLI is a command-line interface application designed to consume the Rick and Morty API, allowing users to fetch data about characters, locations, and episodes from the show.
+RickAndMortyCLI is a command-line interface application designed to consume the Rick and Morty API (https://rickandmortyapi.com), allowing users to fetch data about characters, locations, and episodes from the show.
 
 ## Features
 

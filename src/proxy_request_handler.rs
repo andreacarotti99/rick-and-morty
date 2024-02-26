@@ -1,7 +1,7 @@
 use serde_json::Value;
 use crate::proxy::{Cache, Users};
 
-// for the first implementation for a user is enough to have a valid api key. not him api key
+// for the first implementation for a user is enough to have a valid api key. not his api key
 pub async fn request_handler(endpoint: String, api_key: String, cache: Cache, users: Users) -> Result<impl warp::Reply, warp::Rejection> {
     println!("Received request for {}", endpoint);
 
