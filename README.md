@@ -39,12 +39,12 @@ cargo run -- --proxy <proxy-address> --key <api-key> <arguments>
 where `<arguments>` is one of the above commands to fetch data from the api.
 If the proxy have not yet cached any data, the request will be forwarded to the server, otherwise will be served to the user. 
 
-Currently, the data of the proxy is temporary. So users will have to sign-up again if the proxy is stopped. The same stands for the cached data. Once the proxy is turned off, all the cached data is deleted. Currently the proxy is hard-coded at the address `127.0.0.1` port `3030`.
+Currently, the data of the proxy is temporary. So users will have to sign-up again if the proxy is stopped. The same stands for the cached data. Once the proxy is turned off, all the cached data is deleted. Currently the proxy is hard-coded at the address `127.0.0.1` port `3030`. Note that you need to add `/` at the end of the port. 
 
 Example:
 - Open terminal (1) and run `cargo run -- start-proxy`
 - Open terminal (2) and run `cargo run -- sign-up andrea`. Let's assume the API key is `566bc85a-58bc-4af7-ad4c-87ab32678`
-- Run in terminal (2) `cargo run -- --proxy 127.0.0.1:3030 --key 566bc85a-58bc-4af7-ad4c-87ab32678 fetch-all-characters`. A list of character from the server is provided
-- Run again on terminal (2) `cargo run -- --proxy 127.0.0.1:3030 --key 566bc85a-58bc-4af7-ad4c-87ab32678 fetch-all-characters`. Now the results will be fetched from the cache of the proxy.
+- Run in terminal (2) `cargo run -- --proxy 127.0.0.1:3030/ --key 566bc85a-58bc-4af7-ad4c-87ab32678 fetch-all-characters`. A list of character from the server is provided
+- Run again on terminal (2) `cargo run -- --proxy 127.0.0.1:3030/ --key 566bc85a-58bc-4af7-ad4c-87ab32678 fetch-all-characters`. Now the results will be fetched from the cache of the proxy.
 
 
