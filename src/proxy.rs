@@ -76,8 +76,8 @@ pub async fn start_proxy() {
             }
         });
 
-    
-
+    //WARNING: the order of the or clause does matter, because the filtered requests pass also the check of the std requests
+    // the opposite doesn't hold. 
     let routes = signup.or(proxy_filtered_requests).or(proxy_std_requests);
     
     println!("Proxy listening on port 3030");

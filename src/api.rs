@@ -186,17 +186,15 @@ async fn test_proxy_server_concurrency_requests() {
 
     let _results: Vec<_> = futures::future::join_all(tasks).await;
     let duration_server_requests = start.elapsed();
-    println!("Total execution time: {:?}", duration_server_requests);
 
     // now test the cached results
-    
     let client_count = 100;
     let mut tasks = Vec::new();
     let start = tokio::time::Instant::now();
 
     for i in 0..client_count {
         let handler = Handler {
-            base_url: "http://127.0.0.1:3030/".to_string(),
+            base_url: "http://127.0.0.1:3030/proxy/".to_string(),
             api_key: "secret_key".to_string()
         };
         
@@ -207,7 +205,9 @@ async fn test_proxy_server_concurrency_requests() {
 
     let _results: Vec<_> = futures::future::join_all(tasks).await;
     let duration_cache_requests = start.elapsed();
-    println!("Total execution time: {:?}", duration_cache_requests);
+
+    println!("Total execution time cache: {:?}", duration_cache_requests);
+    println!("Total execution time server: {:?}", duration_server_requests);
 
 }
 
