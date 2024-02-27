@@ -13,6 +13,7 @@ use crate::proxy::SignupInfo;
 
 
 pub async fn fetch_and_deserialize<T: DeserializeOwned>(url: &str, api_key: &str) -> Result<T, Error> {
+    println!("{}", url);
     let client = Client::new();
     let response = client.get(url)
         .header("x-api-key", api_key)
@@ -158,7 +159,7 @@ async fn test_proxy_server_concurrency_signup() {
 }
 
 // testing 100 requests to the server 
-/* 
+
 #[tokio::test]
 async fn test_proxy_server_concurrency_requests() {
     tokio::spawn(async {
@@ -210,4 +211,3 @@ async fn test_proxy_server_concurrency_requests() {
 
 }
 
-*/

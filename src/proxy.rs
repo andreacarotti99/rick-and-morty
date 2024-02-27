@@ -39,7 +39,24 @@ pub async fn start_proxy() {
             }
         });
 
-    let proxy = warp::path("proxy")
+    let proxy_std_requests = warp::path("proxy")
+        .and(warp::get())
+        .and(warp::path::tail())
+        //.and(warp::query::raw())
+        .and(warp::header::<String>("x-api-key"))
+        .and_then({
+            let cache_clone = cache.clone(); 
+            let users_clone = users.clone(); 
+            move |tail: warp::filters::path::Tail,  api_key: String| {
+                let tail_str = tail.as_str().to_string();
+                
+                println!("Forwarding to: {}", tail_str); // Debugging output
+                // Forward the request including the path and query string
+                proxy_request_handler::request_handler(tail_str, api_key, cache_clone.clone(), users_clone.clone())
+            }
+    });
+
+    let proxy_filtered_requests = warp::path("proxy")
         .and(warp::get())
         .and(warp::path::tail())
         .and(warp::query::raw())
@@ -59,7 +76,9 @@ pub async fn start_proxy() {
             }
         });
 
-    let routes = signup.or(proxy);
+    
+
+    let routes = signup.or(proxy_filtered_requests).or(proxy_std_requests);
     
     println!("Proxy listening on port 3030");
     warp::serve(routes).run(([127, 0, 0, 1], 3030)).await;
