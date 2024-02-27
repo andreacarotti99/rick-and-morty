@@ -50,7 +50,7 @@ pub async fn start_proxy() {
             move |tail: warp::filters::path::Tail,  api_key: String| {
                 let tail_str = tail.as_str().to_string();
                 
-                println!("Forwarding to: {}", tail_str); // Debugging output
+                // println!("Forwarding to: {}", tail_str); // Debugging output
                 // Forward the request including the path and query string
                 proxy_request_handler::request_handler(tail_str, api_key, cache_clone.clone(), users_clone.clone())
             }

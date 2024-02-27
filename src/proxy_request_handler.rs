@@ -9,7 +9,7 @@ pub async fn request_handler(endpoint: String, api_key: String, cache: Cache, us
     let users = users.lock().await;
     
     let api_key_exists = users.contains_key(&api_key);
-    
+
     if !api_key_exists {
         println!("API key is either wrong or not provided");
         println!("API key provided: {}", api_key);
@@ -25,8 +25,8 @@ pub async fn request_handler(endpoint: String, api_key: String, cache: Cache, us
         // Fetch the resource from the API if not in the cache
         let base = "https://rickandmortyapi.com/api/";
         let requested_url = format!("{}{}", base, endpoint);
-        println!("Proxy doesn't have the resource... fetching it...\n");
-        println!("Request URL: {}\n", requested_url);
+        println!("Proxy doesn't have the resource... fetching it...");
+        println!("Request URL: {}", requested_url);
 
         let response = reqwest::get(&requested_url)
             .await

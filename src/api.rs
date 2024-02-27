@@ -13,7 +13,7 @@ use crate::proxy::SignupInfo;
 
 
 pub async fn fetch_and_deserialize<T: DeserializeOwned>(url: &str, api_key: &str) -> Result<T, Error> {
-    println!("{}", url);
+    //println!("{}", url);
     let client = Client::new();
     let response = client.get(url)
         .header("x-api-key", api_key)
