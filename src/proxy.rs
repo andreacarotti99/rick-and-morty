@@ -10,6 +10,10 @@ use serde_json::Value;
 pub type Users = Arc<Mutex<HashMap<String, String>>>;
 pub type Cache = Arc<Mutex<HashMap<String, Value>>>;
 
+const ADDRESS: &str = "127.0.0.1";
+const PORT: u16 = 3030;
+
+
 #[derive(Serialize, Deserialize)]
 pub struct SignupInfo {
     pub username: String,
@@ -80,8 +84,10 @@ pub async fn start_proxy() {
     // the opposite doesn't hold. 
     let routes = signup.or(proxy_filtered_requests).or(proxy_std_requests);
     
-    println!("Proxy listening on port 3030");
-    warp::serve(routes).run(([127, 0, 0, 1], 3030)).await;
+    let addr = (ADDRESS.parse::<std::net::IpAddr>().unwrap(), PORT);
+    println!("Proxy listening on {}:{}", ADDRESS, PORT);
+    warp::serve(routes).run(addr).await;
+
 }
 
 
