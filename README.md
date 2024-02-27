@@ -43,8 +43,8 @@ Currently, the data of the proxy is temporary. So users will have to sign-up aga
 
 Example:
 - Open terminal (1) and run `cargo run -- start-proxy`
-- Open terminal (2) and run `cargo run -- sign-up andrea`. Let's assume the API key is `andrea_1`
-- Run in terminal (2) `cargo run -- --proxy 127.0.0.1:3030 --key andrea_1 fetch-all-characters`. A list of character from the server is provided
-- Run again on terminal (2) `cargo run -- --proxy 127.0.0.1:3030 --key andrea_1 fetch-all-characters`. Now the results will be fetched from the cache of the proxy.
+- Open terminal (2) and run `cargo run -- sign-up andrea`. Let's assume the API key is `566bc85a-58bc-4af7-ad4c-87ab32678`
+- Run in terminal (2) `cargo run -- --proxy 127.0.0.1:3030 --key 566bc85a-58bc-4af7-ad4c-87ab32678 fetch-all-characters`. A list of character from the server is provided
+- Run again on terminal (2) `cargo run -- --proxy 127.0.0.1:3030 --key 566bc85a-58bc-4af7-ad4c-87ab32678 fetch-all-characters`. Now the results will be fetched from the cache of the proxy.
 
 

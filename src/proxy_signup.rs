@@ -1,5 +1,6 @@
 use warp::{http::StatusCode, Reply, Rejection, reply};
 use crate::proxy::Users;
+use uuid::Uuid;
 
 pub async fn signup_handler(users: Users, username: String) -> Result<impl Reply, Rejection> {
     let mut users = users.lock().await; // Acquiring the lock on users
@@ -11,7 +12,8 @@ pub async fn signup_handler(users: Users, username: String) -> Result<impl Reply
         return Ok(with_status);
     }
     
-    let api_key = format!("{}_{}", username, users.len() + 1);
+    let api_key = Uuid::new_v4().to_string();
+
     
     let proxy_api_key_response = format!("your api key is: {}", api_key);
     users.insert( api_key.clone(), username.clone());
