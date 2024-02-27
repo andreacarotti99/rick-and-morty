@@ -19,7 +19,7 @@ pub async fn request_handler(endpoint: String, api_key: String, cache: Cache, us
     // Check if the resource is in the cache
     let mut cache = cache.lock().await;
     if let Some(cached_response) = cache.get(&endpoint) {
-        println!("Proxy does have the resource in Cache!\n");
+        println!("Proxy does have the resource in Cache!");
         return Ok(warp::reply::json(cached_response));
     } else {
         // Fetch the resource from the API if not in the cache
