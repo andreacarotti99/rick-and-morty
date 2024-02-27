@@ -13,7 +13,7 @@ impl Handler {
 
     pub fn new(cli: &Cli) -> Self {
         let base_url = match &cli.proxy {
-            Some(proxy_url) => format!("{}proxy/", proxy_url), // Use the provided proxy URL as the base
+            Some(proxy_url) => format!("http://{}/proxy/", proxy_url), // Use the provided proxy URL as the base
             None => "https://rickandmortyapi.com/api/".to_string(), // Default base URL
         };
         let api_key = match &cli.key {
