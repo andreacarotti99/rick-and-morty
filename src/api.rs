@@ -160,12 +160,16 @@ async fn test_proxy_server_concurrency_signup() {
 
 // testing 100 requests to the server 
 
+/* 
 #[tokio::test]
 async fn test_proxy_server_concurrency_requests() {
+    // to test this it is better to run the server separately since the stdout interfere
+    /* 
     tokio::spawn(async {
         crate::proxy::start_proxy().await;
     });
     tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
+    */
     
     // speed test for the server results
     
@@ -210,4 +214,4 @@ async fn test_proxy_server_concurrency_requests() {
     println!("Total execution time server: {:?}", duration_server_requests);
 
 }
-
+*/
