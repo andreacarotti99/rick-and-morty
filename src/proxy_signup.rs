@@ -2,6 +2,19 @@ use warp::{http::StatusCode, Reply, Rejection, reply};
 use crate::proxy::Users;
 use uuid::Uuid;
 
+/// Handles the signup process, creating a new user with a unique API key.
+///
+/// This function checks if the username already exists in the shared `Users` structure. If not,
+/// it generates a new API key for the user and inserts it into `Users`. It returns an API key
+/// for successful signups or an error message if the username already exists.
+///
+/// # Arguments
+/// * `users` - A shared `Users` structure to store and validate usernames and API keys.
+/// * `username` - The username submitted for signup.
+///
+/// # Returns
+/// A `Result` with a `warp::Reply` that contains the new API key for successful signups or
+/// an error message for failed signups, and a `Rejection` if an unexpected error occurs.
 pub async fn signup_handler(users: Users, username: String) -> Result<impl Reply, Rejection> {
     let mut users = users.lock().await; // Acquiring the lock on users
 

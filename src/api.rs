@@ -11,7 +11,7 @@ use crate::proxy::SignupInfo;
 
 
 
-
+/// Fetches data from a given URL and deserializes it into a specified type.
 pub async fn fetch_and_deserialize<T: DeserializeOwned>(url: &str, api_key: &str) -> Result<T, Error> {
     //println!("{}", url);
     let client = Client::new();
@@ -24,8 +24,7 @@ pub async fn fetch_and_deserialize<T: DeserializeOwned>(url: &str, api_key: &str
 }
 
 
-// Characters
-
+/// Fetches characters matching specified filters.
 pub async fn fetch_filtered_characters(handler: &Handler, filter: &FilterCharacter) -> Result<CharactersResponse, Error> {
     let query_string = filter.to_query_string();
     println!("{}", query_string);
@@ -34,18 +33,20 @@ pub async fn fetch_filtered_characters(handler: &Handler, filter: &FilterCharact
     fetch_and_deserialize::<CharactersResponse>(&filtered_characters_url, &handler.api_key).await
 }
 
+/// Fetches all characters.
 pub async fn fetch_all_characters(handler: &Handler,) -> Result<CharactersResponse, Error> {
     let all_characters_url = format!("{}character", handler.base_url);
     fetch_and_deserialize::<CharactersResponse>(&all_characters_url, &handler.api_key).await
 }
 
-
+/// Fetches a single character by ID.
 pub async fn fetch_single_character(handler: &Handler, character_id: i32) -> Result<Character, Error> {
     let single_character_url = format!("{}character/{}", handler.base_url, character_id);
     println!("{}",single_character_url);
     fetch_and_deserialize::<Character>(&single_character_url, &handler.api_key).await
 }
 
+/// Fetches a list of characters by their IDs.
 pub async fn fetch_characters_list(handler: &Handler, character_ids: &[i32]) -> Result<CharactersListResponse, Error> {
     let ids_string = character_ids.iter()
         .map(|id| id.to_string())
@@ -55,18 +56,19 @@ pub async fn fetch_characters_list(handler: &Handler, character_ids: &[i32]) -> 
     fetch_and_deserialize::<CharactersListResponse>(&list_characters_url, &handler.api_key).await
 }
 
-// locations 
-
+/// Fetches a single location by ID.
 pub async fn fetch_single_location(handler: &Handler, location_id: i32) -> Result<Location, Error> {
     let single_location_url = format!("{}location/{}", handler.base_url, location_id);
     fetch_and_deserialize::<Location>(&single_location_url, &handler.api_key).await
 }
 
+/// Fetches all locations.
 pub async fn fetch_all_locations(handler: &Handler) -> Result<LocationResponse, Error> {
     let all_locations_url = format!("{}location", handler.base_url);
     fetch_and_deserialize::<LocationResponse>(&all_locations_url, &handler.api_key).await
 }
 
+/// Fetches locations matching specified filters.
 pub async fn fetch_filtered_locations(handler: &Handler, filter: &FilterLocation) -> Result<LocationResponse, Error> {
     let query_string = filter.to_query_string();
     let filtered_location_url = format!("{}location/?{}", handler.base_url, query_string);
@@ -74,6 +76,7 @@ pub async fn fetch_filtered_locations(handler: &Handler, filter: &FilterLocation
     fetch_and_deserialize::<LocationResponse>(&filtered_location_url, &handler.api_key).await
 }
 
+/// Fetches a list of locations by their IDs.
 pub async fn fetch_location_list(handler: &Handler, location_ids: &[i32]) -> Result<LocationListResponse, Error> {
     let ids_string = location_ids.iter()
         .map(|id| id.to_string())
@@ -85,17 +88,20 @@ pub async fn fetch_location_list(handler: &Handler, location_ids: &[i32]) -> Res
 
 // episodes
 
+/// Fetches a single episode by ID.
 pub async fn fetch_single_episode(handler: &Handler, episode_id: i32) -> Result<Episode, Error> {
     let single_episde_url = format!("{}episode/{}", handler.base_url, episode_id);
     fetch_and_deserialize::<Episode>(&single_episde_url, &handler.api_key).await
 }
 
+/// Fetches all episodes.
 pub async fn fetch_all_episodes(handler: &Handler) -> Result<EpisodeResponse, Error> {
     let all_episode_url = format!("{}episode/", handler.base_url);
     print!("{}\n", all_episode_url);
     fetch_and_deserialize::<EpisodeResponse>(&all_episode_url, &handler.api_key).await
 }
 
+/// Fetches episodes matching specified filters.
 pub async fn fetch_filtered_episode(handler: &Handler, filter: &FilterEpisode) -> Result<EpisodeResponse, Error> {
     let query_string = filter.to_query_string();
     let filtered_episode_url = format!("{}episode/?{}", handler.base_url, query_string);
@@ -103,6 +109,7 @@ pub async fn fetch_filtered_episode(handler: &Handler, filter: &FilterEpisode) -
     fetch_and_deserialize::<EpisodeResponse>(&filtered_episode_url, &handler.api_key).await
 }
 
+/// Fetches a list of episodes by their IDs.
 pub async fn fetch_episode_list(handler: &Handler, episode_ids: &[i32]) -> Result<EpisodeListResponse, Error> {
     let ids_string = episode_ids.iter()
         .map(|id| id.to_string())
@@ -113,6 +120,9 @@ pub async fn fetch_episode_list(handler: &Handler, episode_ids: &[i32]) -> Resul
 }
 
 // signup
+/// Sends a sign-up request to the server.
+/// # Arguments
+/// * `requested_username` - The username to use for signing up.
 pub async fn send_signup(requested_username: &str) -> Result<String, Error> {
     
     let signup_info = SignupInfo {
@@ -130,6 +140,8 @@ pub async fn send_signup(requested_username: &str) -> Result<String, Error> {
 }
 
 
+/// Tests the proxy server's ability to handle concurrent sign-up requests.
+/// This function simulates multiple clients (1000) signing up to test the server's concurrency capabilities.
 #[tokio::test]
 async fn test_proxy_server_concurrency_signup() {
     // testing 1000 different clients (username) requesting 1000 different API keys

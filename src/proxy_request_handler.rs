@@ -1,7 +1,20 @@
 use serde_json::Value;
 use crate::proxy::{Cache, Users};
 
-// for the first implementation for a user is enough to have a valid api key. not his api key
+/// Handles incoming API requests, checking the cache and user permissions before proceeding.
+///
+/// This function acts as a middleware for the proxy server. It validates the provided API key,
+/// checks if the requested data is in the cache, and fetches from the remote API if necessary.
+///
+/// # Arguments
+/// * `endpoint` - The specific API endpoint that the request is targeting.
+/// * `api_key` - The API key provided by the user to authenticate the request.
+/// * `cache` - A shared cache structure to store and retrieve cached API responses.
+/// * `users` - A shared user structure to validate API keys.
+///
+/// # Returns
+/// A `Result` with a `warp::Reply` if the request is successful, or a `warp::Rejection` if
+/// the request fails due to invalid API key or if the data cannot be fetched from the API.
 pub async fn request_handler(endpoint: String, api_key: String, cache: Cache, users: Users) -> Result<impl warp::Reply, warp::Rejection> {
     println!("Received request for {}", endpoint);
 

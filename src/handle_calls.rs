@@ -9,6 +9,12 @@ pub struct Handler {
     pub api_key: String
 }
 
+
+/// `Handler` is responsible for executing API calls based on commands received from the CLI.
+///
+/// It contains the base URL and API key for making requests to the API. Methods of this struct
+/// handle various operations such as fetching characters, locations, and episodes, as well as
+/// managing user sign-up and proxy functionality.
 impl Handler {
 
     pub fn new(cli: &Cli) -> Self {

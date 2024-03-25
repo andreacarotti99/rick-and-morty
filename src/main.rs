@@ -18,6 +18,9 @@ async fn main() {
     dispatch_command(cli).await;
 }
 
+
+/// Dispatches CLI commands to the appropriate handlers. This function uses the parsed CLI arguments to determine which action to execute,
+/// delegating to the `Handler` for the actual execution of the command logic.
 async fn dispatch_command(cli: Cli) {
     use Commands::*;
     

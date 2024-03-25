@@ -6,20 +6,26 @@ use serde::{Deserialize, Serialize};
 use crate::{proxy_signup, proxy_request_handler};
 use serde_json::Value;
 
-
+/// Shared storage type definitions.
 pub type Users = Arc<Mutex<HashMap<String, String>>>;
 pub type Cache = Arc<Mutex<HashMap<String, Value>>>;
 
+/// Network constants for the proxy server.
 const ADDRESS: &str = "127.0.0.1";
 const PORT: u16 = 3030;
 
-
+/// Data structure for signup information.
 #[derive(Serialize, Deserialize)]
 pub struct SignupInfo {
     pub username: String,
 }
 
+/// Starts the proxy server to handle requests.
+///
+/// Initializes the cache and user storage, sets up routing for signup and proxy requests, and starts
+/// the Warp server to listen for incoming requests. It includes a backdoor for testing purposes.
 pub async fn start_proxy() {
+
     //the cache contains the string requested and the responde
     let cache = Arc::new(Mutex::new(HashMap::new())); // Shared cache
 
@@ -32,7 +38,7 @@ pub async fn start_proxy() {
         users_lock.insert("secret_key".to_string(), "secret_username".to_string());
     }
 
-
+    // Define the signup route
     let signup = warp::path("signup")
         .and(warp::post())
         .and(body::json::<SignupInfo>())  // Extract the username from the request body
@@ -43,6 +49,7 @@ pub async fn start_proxy() {
             }
         });
 
+    // Define the standard proxy route
     let proxy_std_requests = warp::path("proxy")
         .and(warp::get())
         .and(warp::path::tail())
@@ -60,6 +67,7 @@ pub async fn start_proxy() {
             }
     });
 
+    // Define the filtered proxy route
     let proxy_filtered_requests = warp::path("proxy")
         .and(warp::get())
         .and(warp::path::tail())
@@ -84,6 +92,7 @@ pub async fn start_proxy() {
     // the opposite doesn't hold. 
     let routes = signup.or(proxy_filtered_requests).or(proxy_std_requests);
     
+    // Set up and start the Warp server
     let addr = (ADDRESS.parse::<std::net::IpAddr>().unwrap(), PORT);
     println!("Proxy listening on {}:{}", ADDRESS, PORT);
     warp::serve(routes).run(addr).await;
